@@ -21,9 +21,9 @@
 
 ## Linear Regression
 - Causal effect $E[Y|X=1] - E[Y|X=0]$ 
-- Total Sum of Squares $TSS = \sum_{i=1}^n (y_i-\bar y)$
-- Explained Sum of Squares $ESS = \sum_{i=1}^n (\hat y_i-\bar y)$
-- Sum of Squared Residuals $SSR = \sum_{i=1}^n e_i$
+- Total Sum of Squares $TSS = \sum_{i=1}^n (y_i-\bar y)^2$
+- Explained Sum of Squares $ESS = \sum_{i=1}^n (\hat y_i-\bar y)^2$
+- Sum of Squared Residuals $SSR = \sum_{i=1}^n e_i^2$
 - Coefficient of Determination 
   $$R^2 = \frac{ESS}{TSS} = 1-\frac{SSR}{TSS} = \widehat{corr}(y_i, x_{i2})^2$$ 
   $\rightarrow$ high $R^2$ is good
@@ -139,7 +139,7 @@ Nonlinear in explanatory variables but still linear in parameters. Special cases
   - linear-log model: $y_i = \beta_1 + \beta_2\ln(x_i2) + \epsilon_i$
   $\rightarrow \Delta y = f(x_2+\Delta x_2)-f(x_2) \cong \beta_2 \frac{\Delta x_2}{x_2}$
   1% change in $x_2$ associated to $0.01\beta_2$ change in y
-  - log-linear model: $\ln(y_i) = \beta_1 + \beta_ 2x_i2 + \epsilon_i$
+  - log-linear model: $\ln(y_i) = \beta_1 + \beta_ 2x_{i2} + \epsilon_i$
   $\rightarrow \frac{\Delta y}{y} \cong \beta_2 \Delta x_2$
   1 unit change in $x_2$ associated to $100\times\beta_2$% change in y
   - log-log model: $\ln(y_i) = \beta_1 + \beta_2\ln(x_i2) + \epsilon_i$
