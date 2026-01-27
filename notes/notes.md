@@ -1,3 +1,8 @@
+---
+title: Untitled
+author: Alassane Diagne
+date: 2026-01-14T21:10:24Z
+---
 
 #  Prep Course
 
@@ -223,3 +228,58 @@ Obtain White’s test statistic $nR^2 \xrightarrow{d}\chi^2_{J-1}$ under $H_0$.
 reject if $nR^2 > \chi_{J−1,1−\alpha}​$
 
 with smaller sample sizes, the heteroskedasticity-robust statistics might not be well behaved
+
+# Instrumental Variables Regression
+If $\text{Cov}(X, \epsilon)\neq 0$ endogenous
+Find valid instrument $Z$ with 
+1. relevant: $\text{Cov}(X,Z)\neq 0$
+2. exogenous: $\text{Cov}(Z,\epsilon) = 0$
+
+Two stage least square estimator
+1. Regress X on Z $\Rightarrow \widehat X$ (exogenous)
+2. Regress Y on $\widehat X \Rightarrow b_1^{TSLS} = \frac{S_{Z,Y}}{S_{Z,X}}$
+
+$E[b_1^{TSLS}] = \beta_1$,
+$\text{Var}[b_1^{TSLS}] = \frac{1}{n}\frac{Var[(z_i-\mu_x)\epsilon_i]}{(\text{Cov}(x_i, z_i))^2}$
+
+Test instrument validity
+1. Relevance: First stage F-statistic ($K=1, F>10$)
+2. Exogeneity: we need that $m>K$ (more instruments than endogenous regressors) $\Rightarrow$ J-statistic, in large samples 
+$J = mF \sim \chi^2(m − K)$
+
+# Fixed effects estimator
+Panel data (observe over time)
+
+Assume omitted variable does not vary over time
+Assume $y_{it} = \beta_1x_{it1} + \alpha_1 +\alpha_2z_{i2} +\epsilon_{it} = \beta_1x_{it1}+\underbrace{c_i}_{\text{entity fixed effects}}+\epsilon_{it}$
+
+Take time averages:
+$\bar{y}_{i} = \beta_1\bar{x}_{i1}+c_i+\bar{\epsilon}_{i}$
+$\rightarrow y_{it}-\bar{y}_{i} = \beta_1(x_{it1}-\bar{x}_{i1}) + (\epsilon_{it}-\bar{\epsilon}_{i}) $
+Estimate $\beta_1$ by OLS
+
+Fixed effects assumptions
+**(AP1)** $E[\epsilon_{it}|x_{i1,1},x_{i2,1},...,x_{iT,1},c_i] = 0$
+**(AP2)** $(x_{i1,1},x_{i2,1},...,x_{iT,1},\epsilon_{i1},\epsilon_{i2},...,\epsilon_{iT}), i = 1,...,n$ are i.i.d. draws from
+their joint distribution.
+**(AP3)** $(x_{it,1},\epsilon_{it})$ have nonzero finite fourth moments.
+**(AP4)** Each explanatory variable changes over time (for at least some i) and there is no perfect multicollinearity (when $K > 1$).
+
+$\sqrt{nT}(b_1^{FE}- \beta_1) \overset{a}{\sim} \mathcal{N}(0, \sigma^2_\eta/Q_{\tilde{x}}^2)$
+with 
+- $\tilde{x}_{it,1} = x_{it1}-\bar{x}_{i1}$
+- $\tilde{v}_{it}=\tilde{x}_{it,1}\epsilon_{it}$ 
+- $\eta_i = \sqrt{1/T}\sum_{i=1}^T \tilde{v}_{it}$
+- $\sigma^2_\eta = \text{Var}[\sqrt{1/T}\sum_{i=1}^T \tilde{v}_{it}]$
+- $Q_{\tilde{x}} = E[1/T \sum_{i=1}^T \tilde{x}_{it,1}^2]$
+
+Estimate $\tilde{v}_{it}$ by $\widehat{\tilde{v_{it}}} = x_{it,1}e_{it}$ and  $\sigma^2_\eta$ by $\widehat{\sigma^2_{\eta, cluster}} = \frac{1}{nT} \sum_{i=1}^n(\sum_{i=1}^T \widehat{\tilde{v_{it}}})^2$
+
+Which estimator do we use for panel data?
+$y_{it} = x_{it}'\beta + z_i'\alpha + \epsilon_{it} = x_{it}'\beta + c_i + \epsilon_{it}$
+1. $z_i$ contains only a constant term: then the pooled OLS estimator is consistent and efficient for the common intercept $\alpha$ and slope vector $\beta$
+2. $z_i$ is uncorrelated with $x_{it}$: then the pooled OLS estimator for $\beta$ is consistent but inefficient. Solution: Random Effects Estimator.
+3. $z_i$ is correlated with $x_{it}$: then the pooled OLS estimator for $\beta$ is biased and inconsistent (omitted variable bias). Solution: Fixed Effects Estimator
+
+Testing Random vs. Fixed Effects: Hausman Test
+$W=(b^{FE}-b^{GLS})'(\widehat{Var}(b^{FE})- \widehat{Var}(b^{GLS}))^{-1}(b^{FE}-b^{GLS}) \sim \chi^2(K)$, K is the number of time-varying regressors
